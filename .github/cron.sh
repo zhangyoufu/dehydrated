@@ -12,6 +12,11 @@ if [ "${LOCAL_COMMIT}" = "${LATEST_COMMIT}" ]; then
     exit 0
 fi
 
+# change Docker daemon config
+DOCKERD_CONFIG=$(jq '.+{experimental:true}' /etc/docker/daemon.json)
+sudo tee /etc/docker/daemon.json <<< "${DOCKERD_CONFIG}"
+sudo systemctl restart docker
+
 # build Docker image
 git cat-file blob FETCH_HEAD:dehydrated >.github/docker/dehydrated
 chmod +x .github/docker/dehydrated
