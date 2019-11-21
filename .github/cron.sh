@@ -3,7 +3,7 @@ set -ex
 
 # fetch upstream
 git remote add upstream https://github.com/lukas2511/dehydrated.git
-git fetch --depth=1 upstream master
+git fetch upstream master
 
 # check against book-keeping branch
 LATEST_COMMIT=$(git log -1 --format=format:%H FETCH_HEAD)
