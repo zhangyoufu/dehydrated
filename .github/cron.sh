@@ -2,7 +2,7 @@
 set -ex
 
 # fetch upstream
-git remote add upstream https://github.com/lukas2511/dehydrated.git
+git remote add upstream https://github.com/dehydrated-io/dehydrated.git
 git fetch upstream master
 
 # check against book-keeping branch
