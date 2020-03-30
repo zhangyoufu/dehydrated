@@ -27,4 +27,4 @@ services:
     - --cron
 ```
 
-If you're using [`containrrr/watchtower`](https://github.com/containrrr/watchtower/) to keep your container/image updated, you may want to add (`--include-stopped`)[https://containrrr.github.io/watchtower/arguments/#include_stopped] parameter.
+If you're using [`containrrr/watchtower`](https://github.com/containrrr/watchtower/) to keep your container/image updated, you may want to add [`--include-stopped`](https://containrrr.github.io/watchtower/arguments/#include_stopped) parameter.
