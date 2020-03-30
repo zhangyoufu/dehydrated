@@ -3,19 +3,20 @@ on:
 
 jobs:
   build:
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: true
-    - name: Enable dockerd --experimental for --squash
+    - name: Enable dockerd --experimental for docker build --squash
       run: |
         DOCKERD_CONFIG=$(jq '.+{experimental:true}' /etc/docker/daemon.json)
         sudo tee /etc/docker/daemon.json <<< "${DOCKERD_CONFIG}"
         sudo systemctl restart docker
     - name: Build docker image
       run: |
-        cp dehydrated/dehydrated docker/dehydrated
+        cp dehydrated/dehydrated docker/
         echo "::set-env name=IMAGE_ID::$(docker build --squash --quiet docker)"
     # TODO: test
     - name: Push docker image
