@@ -1,0 +1,30 @@
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Enable dockerd --experimental for --squash
+      run: |
+        DOCKERD_CONFIG=$(jq '.+{experimental:true}' /etc/docker/daemon.json)
+        sudo tee /etc/docker/daemon.json <<< "${DOCKERD_CONFIG}"
+        sudo systemctl restart docker
+    - name: Build docker image
+      run: |
+        cp dehydrated/dehydrated docker/dehydrated
+        echo "::set-env name=IMAGE_ID::$(docker build --squash --quiet docker)"
+    # TODO: test
+    - name: Push docker image
+      if: github.ref == 'refs/heads/master'
+      env:
+        IMAGE_PATH: registry-1.docker.io/youfu/dehydrated:latest
+        REGISTRY_USERNAME: youfu
+        REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      run: |
+        docker login --username "${REGISTRY_USERNAME}" --password "${REGISTRY_PASSWORD}" "${IMAGE_PATH%%/*}"
+        docker tag "${IMAGE_ID}" "${IMAGE_PATH}"
+        docker push "${IMAGE_PATH}"
