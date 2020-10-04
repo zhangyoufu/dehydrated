@@ -22,7 +22,8 @@ jobs:
     - name: Build docker image
       run: |
         cp dehydrated/dehydrated docker/
-        echo "::set-env name=IMAGE_ID::$(docker build --squash --quiet docker)"
+        IMAGE_ID=$(docker build --squash --quiet docker)
+        echo "IMAGE_ID=$IMAGE_ID" >>$GITHUB_ENV
     # TODO: test
     - name: Push docker image
       if: github.ref == 'refs/heads/master'
