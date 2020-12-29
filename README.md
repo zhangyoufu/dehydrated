@@ -3,7 +3,6 @@
 Docker image for [dehydrated](https://github.com/dehydrated-io/dehydrated), available on [Docker Hub](https://hub.docker.com/r/youfu/dehydrated).
 
 * alpine-based
-* python3 py-requests for custom hook script
 * the only available tag is `latest` which is automatically built against `dehydrated-io/dehydrated:master`
 
 You need to populate dehydrated configuration manually:
