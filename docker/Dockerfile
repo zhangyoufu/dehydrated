@@ -1,4 +1,4 @@
-FROM alpine:latest@sha256:f22945d45ee2eb4dd463ed5a431d9f04fcd80ca768bb1acf898d91ce51f7bf04
+FROM alpine:latest@sha256:4edbd2beb5f78b1014028f4fbb99f3237d9561100b6881aabbf5acce2c4f9454
 RUN apk --no-cache add bash ca-certificates-bundle curl jq openssl
 COPY dehydrated /usr/local/bin/dehydrated
 VOLUME ["/etc/dehydrated"]
