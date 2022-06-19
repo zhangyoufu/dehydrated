@@ -4,33 +4,27 @@ concurrency: build
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_PATH: docker.io/youfu/dehydrated:latest
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: true
-    - name: Enable dockerd --experimental for docker build --squash
-      run: |
-        if [ -f /etc/docker/daemon.json ]; then
-        	DOCKERD_CONFIG=$(sudo cat /etc/docker/daemon.json)
-        else
-        	DOCKERD_CONFIG={}
-        fi
-        DOCKERD_CONFIG=$(jq '.+{experimental:true}' <<<"${DOCKERD_CONFIG}")
-        sudo tee /etc/docker/daemon.json <<<"${DOCKERD_CONFIG}"
-        sudo systemctl restart docker
+    - name: Prepare docker image build context
+      run: ln dehydrated/dehydrated docker/
+    - name: Install qemu-user-static as binfmt handler
+      run: |-
+        sudo apt-get update
+        sudo apt-get install -y -o=Dpkg::Use-Pty=0 binfmt-support qemu-user-static
+    - name: Register BuildKit node
+      run: docker buildx create --driver docker-container --use
     - name: Build docker image
-      run: |
-        cp dehydrated/dehydrated docker/
-        IMAGE_ID=$(docker build --squash --quiet docker)
-        echo "IMAGE_ID=$IMAGE_ID" >>$GITHUB_ENV
-    # TODO: test
+      run: docker buildx build --platform linux/amd64,linux/arm64 --tag "$IMAGE_PATH" docker
     - name: Push docker image
       if: github.ref == 'refs/heads/master'
       env:
-        IMAGE_PATH: registry-1.docker.io/youfu/dehydrated:latest
         REGISTRY_USERNAME: youfu
         REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      run: |
+      run: |-
         docker login --username "${REGISTRY_USERNAME}" --password "${REGISTRY_PASSWORD}" "${IMAGE_PATH%%/*}"
-        docker tag "${IMAGE_ID}" "${IMAGE_PATH}"
-        docker push "${IMAGE_PATH}"
+        docker buildx build --platform linux/amd64,linux/arm64 --tag "$IMAGE_PATH" --push docker
