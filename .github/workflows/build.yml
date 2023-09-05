@@ -7,7 +7,7 @@ jobs:
     env:
       IMAGE_PATH: docker.io/youfu/dehydrated:latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: true
     - name: Prepare docker image build context
