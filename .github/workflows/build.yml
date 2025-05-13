@@ -10,8 +10,6 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: true
-    - name: Prepare docker image build context
-      run: ln dehydrated/dehydrated docker/
     - name: Install qemu-user-static as binfmt handler
       run: |-
         sudo apt-get update
@@ -19,7 +17,7 @@ jobs:
     - name: Register BuildKit node
       run: docker buildx create --driver docker-container --use
     - name: Build docker image
-      run: docker buildx build --platform linux/amd64,linux/arm64 --tag "$IMAGE_PATH" docker
+      run: docker buildx build --platform linux/amd64,linux/arm64 --tag "$IMAGE_PATH" --build-context dehydrated=dehydrated - < Dockerfile
     - name: Push docker image
       if: github.ref == 'refs/heads/master'
       env:
@@ -27,4 +25,4 @@ jobs:
         REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       run: |-
         docker login --username "${REGISTRY_USERNAME}" --password "${REGISTRY_PASSWORD}" "${IMAGE_PATH%%/*}"
-        docker buildx build --platform linux/amd64,linux/arm64 --tag "$IMAGE_PATH" --push docker
+        docker buildx build --platform linux/amd64,linux/arm64 --tag "$IMAGE_PATH" --build-context dehydrated=dehydrated --push - < Dockerfile
