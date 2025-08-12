@@ -7,7 +7,7 @@ jobs:
     env:
       IMAGE_PATH: ghcr.io/zhangyoufu/dehydrated:latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: true
     - name: Install qemu-user-static as binfmt handler
