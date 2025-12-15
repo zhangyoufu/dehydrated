@@ -1,23 +1,20 @@
 version: 2
 updates:
 - package-ecosystem: gitsubmodule
-  directory: "/"
+  directory: /
   schedule:
     interval: daily
-    time: "09:00"
+    time: 09:00
     timezone: Asia/Shanghai
-  open-pull-requests-limit: 99
 - package-ecosystem: docker
-  directory: "/docker"
+  directory: /
   schedule:
     interval: daily
-    time: "09:00"
+    time: 09:00
     timezone: Asia/Shanghai
-  open-pull-requests-limit: 99
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
     interval: daily
-    time: "09:00"
+    time: 09:00
     timezone: Asia/Shanghai
-  open-pull-requests-limit: 99
