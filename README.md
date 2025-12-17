@@ -1,9 +1,6 @@
 # Usage
 
-Docker image for [dehydrated](https://github.com/dehydrated-io/dehydrated), available on [Docker Hub](https://hub.docker.com/r/youfu/dehydrated).
-
-* alpine-based
-* the only available tag is `latest` which is automatically built against `dehydrated-io/dehydrated:master`
+Docker image for [dehydrated](https://github.com/dehydrated-io/dehydrated), available on [GitHub Container Registry](https://github.com/zhangyoufu/dehydrated-docker/pkgs/container/dehydrated) (`ghcr.io/zhangyoufu/dehydrated`).
 
 You need to populate dehydrated configuration manually:
 
