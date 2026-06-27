@@ -9,6 +9,9 @@ concurrency: build
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     env:
       IMAGE_PATH: ghcr.io/${{ github.repository_owner }}/dehydrated:${{ github.event_name == 'push' && ( github.ref_name == 'master' && 'latest' || github.ref_name ) || format('pr-{0}', github.event.pull_request.number) }}
     steps:
