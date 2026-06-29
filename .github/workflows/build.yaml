@@ -20,7 +20,13 @@ jobs:
     - uses: zhangyoufu/actions/build-oci-image@main
       with:
         platform: |-
+          linux/386
           linux/amd64
-          linux/arm64
+          linux/arm/v6
+          linux/arm/v7
+          linux/arm64/v8
+          linux/ppc64le
+          linux/riscv64
+          linux/s390x
         image-tag: ${{ github.ref_name == 'master' && 'latest' || github.ref_name }}
         push: ${{ github.event_name == 'push' }}
