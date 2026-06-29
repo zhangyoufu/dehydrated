@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+    - '**'
+  pull_request:
+    branches:
+    - master
+  workflow_dispatch:
+concurrency: build
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - uses: zhangyoufu/actions/checkout@main
+      with:
+        submodules: true
+    - uses: zhangyoufu/actions/build-oci-image@main
+      with:
+        platform: |-
+          linux/amd64
+          linux/arm64
+        image-tag: ${{ github.ref_name == 'master' && 'latest' || github.ref_name }}
+        push: ${{ github.event_name == 'push' }}
