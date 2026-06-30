@@ -14,9 +14,6 @@ jobs:
       contents: read
       packages: write
     steps:
-    - uses: zhangyoufu/actions/checkout@main
-      with:
-        submodules: true
     - uses: zhangyoufu/actions/build-oci-image@main
       with:
         platform: |-
